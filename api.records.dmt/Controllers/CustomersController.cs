@@ -29,15 +29,12 @@ namespace CustomerApi.Controllers
 
         [EnableQuery]
         [HttpGet]
-        public async Task<IActionResult> Get(ODataQueryOptions<Customer> queryOptions)
+        public async Task<IActionResult> Get()
         {
             var query = _container.GetItemLinqQueryable<Customer>(true);
 
-            // Apply OData query options
-            var appliedQuery = (IQueryable<Customer>)queryOptions.ApplyTo(query);
-
             // Execute the query with Cosmos DB
-            var iterator = appliedQuery.ToFeedIterator();
+            var iterator = query.ToFeedIterator();
             var results = new List<Customer>();
 
             while (iterator.HasMoreResults)
@@ -48,5 +45,6 @@ namespace CustomerApi.Controllers
 
             return Ok(results);
         }
+
     }
 }
